@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Singapore Trip Interactive Map</title>
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="./manifest.json">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
-        body, html {
+        html, body {
             margin: 0;
             padding: 0;
             height: 100%;
@@ -32,23 +32,23 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // 示例标记点
+        // 标记点数据
         var locations = [
             {name: "OCBC Bank", coords: [1.2841, 103.8510]},
             {name: "East Coast Hotel", coords: [1.3039, 103.9150]},
             {name: "Marina Bay Sands", coords: [1.2834, 103.8607]}
         ];
 
+        // 循环添加标记
         locations.forEach(function(loc) {
             L.marker(loc.coords).addTo(map)
-                .bindPopup("<b>" + loc.name + "</b>")
-                .openPopup();
+                .bindPopup("<b>" + loc.name + "</b>");
         });
     </script>
 
     <script>
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js')
+            navigator.serviceWorker.register('./service-worker.js')
                 .then(function(reg) {
                     console.log("Service Worker registered", reg);
                 })
