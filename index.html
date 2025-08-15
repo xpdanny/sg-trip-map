@@ -1,90 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Singapore 3-Day Trip Map</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<style>
-    body, html { margin: 0; padding: 0; height: 100%; }
-    #map { height: 100%; }
-    .popup-img { width: 200px; height: auto; margin-top: 5px; border-radius: 5px; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Singapore 3-Day Trip</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+        #map {
+            height: 100%;
+        }
+        .popup-content {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        .popup-content img {
+            width: 100%;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
+    <div id="map"></div>
 
-<div id="map"></div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([1.3521, 103.8198], 12);
 
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script>
-    var map = L.map('map').setView([1.3039, 103.9150], 12); // 东海岸中心
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
 
-    // 瓦片图层
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map);
+        var locations = [
+            {
+                name: "OCBC Bank",
+                coords: [1.2841, 103.8510],
+                time: "每日 14:00-16:00",
+                desc: "办公时间，处理银行事务。可步行至附近咖啡馆喝无糖咖啡。",
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/OCBC_Centre%2C_Singapore_-_20150822-02.jpg/320px-OCBC_Centre%2C_Singapore_-_20150822-02.jpg"
+            },
+            {
+                name: "Marina Bay Sands",
+                coords: [1.2834, 103.8607],
+                time: "第1天下午 & 夜景",
+                desc: "傍晚看日落和夜景，晚餐选择低脂海鲜或沙拉，避免油炸食品。",
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Marina_Bay_Sands_in_the_evening_-_20101120.jpg/320px-Marina_Bay_Sands_in_the_evening_-_20101120.jpg"
+            },
+            {
+                name: "East Coast Park",
+                coords: [1.3039, 103.9150],
+                time: "早晨骑行",
+                desc: "沿海骑行或慢跑 1 小时，早餐以燕麦、水果、低脂牛奶为主。",
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/East_Coast_Park%2C_Singapore_-_20140101-01.jpg/320px-East_Coast_Park%2C_Singapore_-_20140101-01.jpg"
+            }
+        ];
 
-    // 景点数据
-    var locations = [
-        {
-            day: 1,
-            name: "East Coast Hotel",
-            coords: [1.3039, 103.9150],
-            time: "入住 & 早餐",
-            food: "燕麦、全麦面包、水煮蛋、无糖豆浆",
-            img: "images/hotel.jpg"
-        },
-        {
-            day: 1,
-            name: "Marina Bay Sands",
-            coords: [1.2834, 103.8607],
-            time: "上午游览",
-            food: "蔬菜沙拉 + 烤鱼",
-            img: "images/marina.jpg"
-        },
-        {
-            day: 1,
-            name: "OCBC Bank",
-            coords: [1.2841, 103.8510],
-            time: "14:00 - 16:00 办公",
-            food: "无油坚果 + 黑咖啡",
-            img: "images/ocbc.jpg"
-        },
-        {
-            day: 1,
-            name: "Gardens by the Bay",
-            coords: [1.2816, 103.8636],
-            time: "傍晚散步",
-            food: "水煮西兰花 + 鸡胸肉",
-            img: "images/gardens.jpg"
-        }
-    ];
-
-    // 不同天用不同颜色
-    var colors = {1: "red", 2: "blue", 3: "green"};
-    var dayCoords = {};
-
-    locations.forEach(function(loc) {
-        var popupContent = "<b>" + loc.name + "</b><br>时间：" + loc.time +
-                           "<br>饮食建议：" + loc.food +
-                           "<br><img src='" + loc.img + "' class='popup-img' alt='photo'>";
-        L.marker(loc.coords).addTo(map).bindPopup(popupContent);
-        if (!dayCoords[loc.day]) dayCoords[loc.day] = [];
-        dayCoords[loc.day].push(loc.coords);
-    });
-
-    // 连线
-    for (var day in dayCoords) {
-        L.polyline(dayCoords[day], {color: colors[day]}).addTo(map);
-    }
-
-    // 点击地图添加临时标记
-    map.on('click', function(e) {
-        L.marker(e.latlng).addTo(map)
-            .bindPopup("我的临时点<br>" + e.latlng.lat.toFixed(5) + ", " + e.latlng.lng.toFixed(5))
-            .openPopup();
-    });
-</script>
-
+        locations.forEach(function(loc) {
+            var popupHTML = `
+                <div class="popup-content">
+                    <b>${loc.name}</b><br>
+                    <i>${loc.time}</i><br>
+                    ${loc.desc}
+                    <img src="${loc.img}" alt="${loc.name}">
+                </div>
+            `;
+            L.marker(loc.coords).addTo(map).bindPopup(popupHTML);
+        });
+    </script>
 </body>
 </html>
