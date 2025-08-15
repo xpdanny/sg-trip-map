@@ -1,500 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<link rel="manifest" href="manifest.json">
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js');
-}
-</script>
-
-    
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    
-        <script>
-            L_NO_TOUCH = false;
-            L_DISABLE_3D = false;
-        </script>
-    
-    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
-    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
-    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js"></script>
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
-    
-            <meta name="viewport" content="width=device-width,
-                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-            <style>
-                #map_3ba8e5b7d71a315e3902c435d499dd7d {
-                    position: relative;
-                    width: 100.0%;
-                    height: 100.0%;
-                    left: 0.0%;
-                    top: 0.0%;
-                }
-            </style>
-        
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Singapore Trip Interactive Map</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-    
-    
-            <div class="folium-map" id="map_3ba8e5b7d71a315e3902c435d499dd7d" ></div>
-        
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // 初始化地图，新加坡中心
+        var map = L.map('map').setView([1.3521, 103.8198], 12);
+
+        // 添加 OpenStreetMap 瓦片层
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // 示例标记点
+        var locations = [
+            {name: "OCBC Bank", coords: [1.2841, 103.8510]},
+            {name: "East Coast Hotel", coords: [1.3039, 103.9150]},
+            {name: "Marina Bay Sands", coords: [1.2834, 103.8607]}
+        ];
+
+        locations.forEach(function(loc) {
+            L.marker(loc.coords).addTo(map)
+                .bindPopup("<b>" + loc.name + "</b>")
+                .openPopup();
+        });
+    </script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(function(reg) {
+                    console.log("Service Worker registered", reg);
+                })
+                .catch(function(err) {
+                    console.error("Service Worker registration failed:", err);
+                });
+        }
+    </script>
 </body>
-<script>
-    
-    
-            var map_3ba8e5b7d71a315e3902c435d499dd7d = L.map(
-                "map_3ba8e5b7d71a315e3902c435d499dd7d",
-                {
-                    center: [1.2906, 103.852],
-                    crs: L.CRS.EPSG3857,
-                    zoom: 13,
-                    zoomControl: true,
-                    preferCanvas: false,
-                }
-            );
-
-            
-
-        
-    
-            var tile_layer_864bcbc3c4695d675fd6af06471c65ff = L.tileLayer(
-                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                {"attribution": "Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
-            ).addTo(map_3ba8e5b7d71a315e3902c435d499dd7d);
-        
-    
-            var marker_703bdfc42ebd4ba1979d6d948923e9ef = L.marker(
-                [1.305, 103.912],
-                {}
-            ).addTo(map_3ba8e5b7d71a315e3902c435d499dd7d);
-        
-    
-            var icon_7e8493a26b4c7d2c655c0317c1ef9766 = L.AwesomeMarkers.icon(
-                {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "blue", "prefix": "glyphicon"}
-            );
-            marker_703bdfc42ebd4ba1979d6d948923e9ef.setIcon(icon_7e8493a26b4c7d2c655c0317c1ef9766);
-        
-    
-        var popup_9468dce8331a93dee1a2b25f2310c868 = L.popup({"maxWidth": "100%"});
-
-        
-            var html_3043f401cdea8d082ab7177f1c07e6ad = $(`<div id="html_3043f401cdea8d082ab7177f1c07e6ad" style="width: 100.0%; height: 100.0%;">东海岸酒店</div>`)[0];
-            popup_9468dce8331a93dee1a2b25f2310c868.setContent(html_3043f401cdea8d082ab7177f1c07e6ad);
-        
-
-        marker_703bdfc42ebd4ba1979d6d948923e9ef.bindPopup(popup_9468dce8331a93dee1a2b25f2310c868)
-        ;
-
-        
-    
-    
-            var marker_c20a9ad34c9ee4437a4f99f423e71f0d = L.marker(
-                [1.2842, 103.8503],
-                {}
-            ).addTo(map_3ba8e5b7d71a315e3902c435d499dd7d);
-        
-    
-            var icon_c98cffd13f0a7b607b38728c545c91c9 = L.AwesomeMarkers.icon(
-                {"extraClasses": "fa-rotate-0", "icon": "briefcase", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
-            );
-            marker_c20a9ad34c9ee4437a4f99f423e71f0d.setIcon(icon_c98cffd13f0a7b607b38728c545c91c9);
-        
-    
-        var popup_fa01ffccb56b2c25b88d3065a7ae38b1 = L.popup({"maxWidth": "100%"});
-
-        
-            var html_04ea652faf58ad501863138ff4e45ea8 = $(`<div id="html_04ea652faf58ad501863138ff4e45ea8" style="width: 100.0%; height: 100.0%;">OCBC Bank 总行</div>`)[0];
-            popup_fa01ffccb56b2c25b88d3065a7ae38b1.setContent(html_04ea652faf58ad501863138ff4e45ea8);
-        
-
-        marker_c20a9ad34c9ee4437a4f99f423e71f0d.bindPopup(popup_fa01ffccb56b2c25b88d3065a7ae38b1)
-        ;
-
-        
-    
-    
-            var marker_8f7d0d4ab725b8549c28025b6ab69c1d = L.marker(
-                [1.2816, 103.8636],
-                {}
-            ).addTo(map_3ba8e5b7d71a315e3902c435d499dd7d);
-        
-    
-            var icon_145b82df33644328af6fbc13d29b3909 = L.AwesomeMarkers.icon(
-                {"extraClasses": "fa-rotate-0", "icon": "star", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
-            );
-            marker_8f7d0d4ab725b8549c28025b6ab69c1d.setIcon(icon_145b82df33644328af6fbc13d29b3909);
-        
-    
-        var popup_22c2b86cbd9dbfa973ee842666ce4c78 = L.popup({"maxWidth": "100%"});
-
-        
-            var html_958e0ae6020b19867f56bc198a8ced0c = $(`<div id="html_958e0ae6020b19867f56bc198a8ced0c" style="width: 100.0%; height: 100.0%;">滨海湾花园</div>`)[0];
-            popup_22c2b86cbd9dbfa973ee842666ce4c78.setContent(html_958e0ae6020b19867f56bc198a8ced0c);
-        
-
-        marker_8f7d0d4ab725b8549c28025b6ab69c1d.bindPopup(popup_22c2b86cbd9dbfa973ee842666ce4c78)
-        ;
-
-        
-    
-    
-            var marker_9d8309e35f0c34ef4109bd2b5e12fb90 = L.marker(
-                [1.2834, 103.8607],
-                {}
-            ).addTo(map_3ba8e5b7d71a315e3902c435d499dd7d);
-        
-    
-            var icon_0db0afc3fdee628cdc378510f36a536e = L.AwesomeMarkers.icon(
-                {"extraClasses": "fa-rotate-0", "icon": "star", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
-            );
-            marker_9d8309e35f0c34ef4109bd2b5e12fb90.setIcon(icon_0db0afc3fdee628cdc378510f36a536e);
-        
-    
-        var popup_711a81f46ec61b5c667217929751718c = L.popup({"maxWidth": "100%"});
-
-        
-            var html_a187986cc42e56c5da017d555b80c893 = $(`<div id="html_a187986cc42e56c5da017d555b80c893" style="width: 100.0%; height: 100.0%;">滨海湾金沙空中花园</div>`)[0];
-            popup_711a81f46ec61b5c667217929751718c.setContent(html_a187986cc42e56c5da017d555b80c893);
-        
-
-        marker_9d8309e35f0c34ef4109bd2b5e12fb90.bindPopup(popup_711a81f46ec61b5c667217929751718c)
-        ;
-
-        
-    
-    
-            var marker_9656ce925dc905aed9e55f02e1414e81 = L.marker(
-                [1.2864, 103.859],
-                {}
-            ).addTo(map_3ba8e5b7d71a315e3902c435d499dd7d);
-        
-    
-            var icon_8920f73a00fcb90e5c6b3365619f15cf = L.AwesomeMarkers.icon(
-                {"extraClasses": "fa-rotate-0", "icon": "star", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
-            );
-            marker_9656ce925dc905aed9e55f02e1414e81.setIcon(icon_8920f73a00fcb90e5c6b3365619f15cf);
-        
-    
-        var popup_1e04b6df9566104c95c097ac6a936368 = L.popup({"maxWidth": "100%"});
-
-        
-            var html_fc453a35a75a8841e5df79d533df1e03 = $(`<div id="html_fc453a35a75a8841e5df79d533df1e03" style="width: 100.0%; height: 100.0%;">艺术科学博物馆</div>`)[0];
-            popup_1e04b6df9566104c95c097ac6a936368.setContent(html_fc453a35a75a8841e5df79d533df1e03);
-        
-
-        marker_9656ce925dc905aed9e55f02e1414e81.bindPopup(popup_1e04b6df9566104c95c097ac6a936368)
-        ;
-
-        
-    
-    
-            var marker_fe36b2f0129b7beec3ca7701f0305582 = L.marker(
-                [1.2868, 103.8545],
-                {}
-            ).addTo(map_3ba8e5b7d71a315e3902c435d499dd7d);
-        
-    
-            var icon_d108307a58ac9f7e7cb6fe9b621c5cd8 = L.AwesomeMarkers.icon(
-                {"extraClasses": "fa-rotate-0", "icon": "star", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
-            );
-            marker_fe36b2f0129b7beec3ca7701f0305582.setIcon(icon_d108307a58ac9f7e7cb6fe9b621c5cd8);
-        
-    
-        var popup_1a279f05589c61a53ac4ffd91990b23f = L.popup({"maxWidth": "100%"});
-
-        
-            var html_7a17fdb47e0b1d60da284035a07a6aa0 = $(`<div id="html_7a17fdb47e0b1d60da284035a07a6aa0" style="width: 100.0%; height: 100.0%;">鱼尾狮公园</div>`)[0];
-            popup_1a279f05589c61a53ac4ffd91990b23f.setContent(html_7a17fdb47e0b1d60da284035a07a6aa0);
-        
-
-        marker_fe36b2f0129b7beec3ca7701f0305582.bindPopup(popup_1a279f05589c61a53ac4ffd91990b23f)
-        ;
-
-        
-    
-    
-            var marker_e01a7353eadaaec57617add0e2163185 = L.marker(
-                [1.2906, 103.8465],
-                {}
-            ).addTo(map_3ba8e5b7d71a315e3902c435d499dd7d);
-        
-    
-            var icon_6591e8dd9a5e970c7d0106ae60c5c79c = L.AwesomeMarkers.icon(
-                {"extraClasses": "fa-rotate-0", "icon": "star", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
-            );
-            marker_e01a7353eadaaec57617add0e2163185.setIcon(icon_6591e8dd9a5e970c7d0106ae60c5c79c);
-        
-    
-        var popup_718d725326954fc842cffacaa4152634 = L.popup({"maxWidth": "100%"});
-
-        
-            var html_76758c13e328809c2e215d2b191d13ac = $(`<div id="html_76758c13e328809c2e215d2b191d13ac" style="width: 100.0%; height: 100.0%;">克拉码头</div>`)[0];
-            popup_718d725326954fc842cffacaa4152634.setContent(html_76758c13e328809c2e215d2b191d13ac);
-        
-
-        marker_e01a7353eadaaec57617add0e2163185.bindPopup(popup_718d725326954fc842cffacaa4152634)
-        ;
-
-        
-    
-    
-            var marker_5b59dd13e1ccca0a4c1caf4d428af66f = L.marker(
-                [1.2841, 103.8438],
-                {}
-            ).addTo(map_3ba8e5b7d71a315e3902c435d499dd7d);
-        
-    
-            var icon_e10555d8f5663cbfc01e4a942c70bffb = L.AwesomeMarkers.icon(
-                {"extraClasses": "fa-rotate-0", "icon": "star", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
-            );
-            marker_5b59dd13e1ccca0a4c1caf4d428af66f.setIcon(icon_e10555d8f5663cbfc01e4a942c70bffb);
-        
-    
-        var popup_a97e14a308133b92a8c11923c0697409 = L.popup({"maxWidth": "100%"});
-
-        
-            var html_c5b05f652ce413a9b8780b08553d28ae = $(`<div id="html_c5b05f652ce413a9b8780b08553d28ae" style="width: 100.0%; height: 100.0%;">牛车水</div>`)[0];
-            popup_a97e14a308133b92a8c11923c0697409.setContent(html_c5b05f652ce413a9b8780b08553d28ae);
-        
-
-        marker_5b59dd13e1ccca0a4c1caf4d428af66f.bindPopup(popup_a97e14a308133b92a8c11923c0697409)
-        ;
-
-        
-    
-    
-            var marker_aeb97248c1eeae8ce9e428064569fa0a = L.marker(
-                [1.2828, 103.844],
-                {}
-            ).addTo(map_3ba8e5b7d71a315e3902c435d499dd7d);
-        
-    
-            var icon_91690872cf69486c17d27d19b76d66c2 = L.AwesomeMarkers.icon(
-                {"extraClasses": "fa-rotate-0", "icon": "star", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
-            );
-            marker_aeb97248c1eeae8ce9e428064569fa0a.setIcon(icon_91690872cf69486c17d27d19b76d66c2);
-        
-    
-        var popup_93bfb44a6c7c9c5ffa6de5bce429d98d = L.popup({"maxWidth": "100%"});
-
-        
-            var html_297c866c804bedd0aeb49e47bc7a203b = $(`<div id="html_297c866c804bedd0aeb49e47bc7a203b" style="width: 100.0%; height: 100.0%;">佛牙寺</div>`)[0];
-            popup_93bfb44a6c7c9c5ffa6de5bce429d98d.setContent(html_297c866c804bedd0aeb49e47bc7a203b);
-        
-
-        marker_aeb97248c1eeae8ce9e428064569fa0a.bindPopup(popup_93bfb44a6c7c9c5ffa6de5bce429d98d)
-        ;
-
-        
-    
-    
-            var marker_69d176dd1d435e6b597b35ff10b10ec1 = L.marker(
-                [1.3074, 103.8501],
-                {}
-            ).addTo(map_3ba8e5b7d71a315e3902c435d499dd7d);
-        
-    
-            var icon_76206906e4bda7dd6a2b947417c91e9a = L.AwesomeMarkers.icon(
-                {"extraClasses": "fa-rotate-0", "icon": "star", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
-            );
-            marker_69d176dd1d435e6b597b35ff10b10ec1.setIcon(icon_76206906e4bda7dd6a2b947417c91e9a);
-        
-    
-        var popup_3e41ebb7a9cd9f494060592ee846b2fa = L.popup({"maxWidth": "100%"});
-
-        
-            var html_7bcac64156e20be99ffe659a1549174c = $(`<div id="html_7bcac64156e20be99ffe659a1549174c" style="width: 100.0%; height: 100.0%;">小印度 Tekka Centre</div>`)[0];
-            popup_3e41ebb7a9cd9f494060592ee846b2fa.setContent(html_7bcac64156e20be99ffe659a1549174c);
-        
-
-        marker_69d176dd1d435e6b597b35ff10b10ec1.bindPopup(popup_3e41ebb7a9cd9f494060592ee846b2fa)
-        ;
-
-        
-    
-    
-            var marker_734e0bf4318b473dbba5ce7f7ba43535 = L.marker(
-                [1.3143, 103.8765],
-                {}
-            ).addTo(map_3ba8e5b7d71a315e3902c435d499dd7d);
-        
-    
-            var icon_65182780684a249f5b990dd1a640a49d = L.AwesomeMarkers.icon(
-                {"extraClasses": "fa-rotate-0", "icon": "star", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
-            );
-            marker_734e0bf4318b473dbba5ce7f7ba43535.setIcon(icon_65182780684a249f5b990dd1a640a49d);
-        
-    
-        var popup_f795fc23d1154afb2227f767fd77dae9 = L.popup({"maxWidth": "100%"});
-
-        
-            var html_dd63d9582b8b9c0dfbacfef1340347f5 = $(`<div id="html_dd63d9582b8b9c0dfbacfef1340347f5" style="width: 100.0%; height: 100.0%;">芽笼 9 巷田鸡粥</div>`)[0];
-            popup_f795fc23d1154afb2227f767fd77dae9.setContent(html_dd63d9582b8b9c0dfbacfef1340347f5);
-        
-
-        marker_734e0bf4318b473dbba5ce7f7ba43535.bindPopup(popup_f795fc23d1154afb2227f767fd77dae9)
-        ;
-
-        
-    
-    
-            var marker_e94544778d8a537ae92c07aa4e52969d = L.marker(
-                [1.3027, 103.859],
-                {}
-            ).addTo(map_3ba8e5b7d71a315e3902c435d499dd7d);
-        
-    
-            var icon_b5e59d0f7ce419ade6228019f3bcad56 = L.AwesomeMarkers.icon(
-                {"extraClasses": "fa-rotate-0", "icon": "star", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
-            );
-            marker_e94544778d8a537ae92c07aa4e52969d.setIcon(icon_b5e59d0f7ce419ade6228019f3bcad56);
-        
-    
-        var popup_cfef6ad941cabde9336ec45255fa457e = L.popup({"maxWidth": "100%"});
-
-        
-            var html_5c794c44758556b6c78edc21c0a80dd9 = $(`<div id="html_5c794c44758556b6c78edc21c0a80dd9" style="width: 100.0%; height: 100.0%;">甘榜格南 苏丹回教堂</div>`)[0];
-            popup_cfef6ad941cabde9336ec45255fa457e.setContent(html_5c794c44758556b6c78edc21c0a80dd9);
-        
-
-        marker_e94544778d8a537ae92c07aa4e52969d.bindPopup(popup_cfef6ad941cabde9336ec45255fa457e)
-        ;
-
-        
-    
-    
-            var marker_d00ddfed778e662121719a20934088fa = L.marker(
-                [1.3021, 103.8581],
-                {}
-            ).addTo(map_3ba8e5b7d71a315e3902c435d499dd7d);
-        
-    
-            var icon_25404c87d42259e430c3364e29a4a011 = L.AwesomeMarkers.icon(
-                {"extraClasses": "fa-rotate-0", "icon": "star", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
-            );
-            marker_d00ddfed778e662121719a20934088fa.setIcon(icon_25404c87d42259e430c3364e29a4a011);
-        
-    
-        var popup_73cc1358f743840fd65aa1dd74cd0131 = L.popup({"maxWidth": "100%"});
-
-        
-            var html_694308eab11814ecf1ce25dded993e2c = $(`<div id="html_694308eab11814ecf1ce25dded993e2c" style="width: 100.0%; height: 100.0%;">哈芝巷</div>`)[0];
-            popup_73cc1358f743840fd65aa1dd74cd0131.setContent(html_694308eab11814ecf1ce25dded993e2c);
-        
-
-        marker_d00ddfed778e662121719a20934088fa.bindPopup(popup_73cc1358f743840fd65aa1dd74cd0131)
-        ;
-
-        
-    
-    
-            var marker_6b7386591339d160ae9fbee696c8829c = L.marker(
-                [1.2644, 103.82],
-                {}
-            ).addTo(map_3ba8e5b7d71a315e3902c435d499dd7d);
-        
-    
-            var icon_be3f60e1b4dd8a095d2ced0a2a8e7a98 = L.AwesomeMarkers.icon(
-                {"extraClasses": "fa-rotate-0", "icon": "star", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
-            );
-            marker_6b7386591339d160ae9fbee696c8829c.setIcon(icon_be3f60e1b4dd8a095d2ced0a2a8e7a98);
-        
-    
-        var popup_6c434f50283b7b2e85f88445171b9d55 = L.popup({"maxWidth": "100%"});
-
-        
-            var html_5815209b535a0e279771c7ed0e08b545 = $(`<div id="html_5815209b535a0e279771c7ed0e08b545" style="width: 100.0%; height: 100.0%;">圣淘沙缆车站</div>`)[0];
-            popup_6c434f50283b7b2e85f88445171b9d55.setContent(html_5815209b535a0e279771c7ed0e08b545);
-        
-
-        marker_6b7386591339d160ae9fbee696c8829c.bindPopup(popup_6c434f50283b7b2e85f88445171b9d55)
-        ;
-
-        
-    
-    
-            var marker_bacda9fee841c1a6039e559d69888f44 = L.marker(
-                [1.2645, 103.8206],
-                {}
-            ).addTo(map_3ba8e5b7d71a315e3902c435d499dd7d);
-        
-    
-            var icon_a5fc19b1b77d2e510d707d115967d728 = L.AwesomeMarkers.icon(
-                {"extraClasses": "fa-rotate-0", "icon": "star", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
-            );
-            marker_bacda9fee841c1a6039e559d69888f44.setIcon(icon_a5fc19b1b77d2e510d707d115967d728);
-        
-    
-        var popup_b863a3e3ea4129251e266a6ad8e3e012 = L.popup({"maxWidth": "100%"});
-
-        
-            var html_f3b8b5dbaf9e74eb7a9a04020d4d79aa = $(`<div id="html_f3b8b5dbaf9e74eb7a9a04020d4d79aa" style="width: 100.0%; height: 100.0%;">S.E.A. 海洋馆</div>`)[0];
-            popup_b863a3e3ea4129251e266a6ad8e3e012.setContent(html_f3b8b5dbaf9e74eb7a9a04020d4d79aa);
-        
-
-        marker_bacda9fee841c1a6039e559d69888f44.bindPopup(popup_b863a3e3ea4129251e266a6ad8e3e012)
-        ;
-
-        
-    
-    
-            var marker_a58b74d231525580f913bcd855ef3794 = L.marker(
-                [1.2733, 103.8198],
-                {}
-            ).addTo(map_3ba8e5b7d71a315e3902c435d499dd7d);
-        
-    
-            var icon_e8a2ebba66be7bef3b7b768a015c4d32 = L.AwesomeMarkers.icon(
-                {"extraClasses": "fa-rotate-0", "icon": "star", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
-            );
-            marker_a58b74d231525580f913bcd855ef3794.setIcon(icon_e8a2ebba66be7bef3b7b768a015c4d32);
-        
-    
-        var popup_78282c81b29becba9eb86501fb5ebc0e = L.popup({"maxWidth": "100%"});
-
-        
-            var html_036f9eedbdef77e18622f5eda8dddb81 = $(`<div id="html_036f9eedbdef77e18622f5eda8dddb81" style="width: 100.0%; height: 100.0%;">Mount Faber 山顶</div>`)[0];
-            popup_78282c81b29becba9eb86501fb5ebc0e.setContent(html_036f9eedbdef77e18622f5eda8dddb81);
-        
-
-        marker_a58b74d231525580f913bcd855ef3794.bindPopup(popup_78282c81b29becba9eb86501fb5ebc0e)
-        ;
-
-        
-    
-    
-            var marker_827c8a405201741f1da19311f1caf356 = L.marker(
-                [1.3043, 103.9333],
-                {}
-            ).addTo(map_3ba8e5b7d71a315e3902c435d499dd7d);
-        
-    
-            var icon_f8a4b2e4d641683eef75e355da0ae96a = L.AwesomeMarkers.icon(
-                {"extraClasses": "fa-rotate-0", "icon": "star", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
-            );
-            marker_827c8a405201741f1da19311f1caf356.setIcon(icon_f8a4b2e4d641683eef75e355da0ae96a);
-        
-    
-        var popup_22264bfcd894cbfec449586b4f19f572 = L.popup({"maxWidth": "100%"});
-
-        
-            var html_753a226ab5babef847d5a1f1700cbf6a = $(`<div id="html_753a226ab5babef847d5a1f1700cbf6a" style="width: 100.0%; height: 100.0%;">East Coast Lagoon Food Village</div>`)[0];
-            popup_22264bfcd894cbfec449586b4f19f572.setContent(html_753a226ab5babef847d5a1f1700cbf6a);
-        
-
-        marker_827c8a405201741f1da19311f1caf356.bindPopup(popup_22264bfcd894cbfec449586b4f19f572)
-        ;
-
-        
-    
-</script>
 </html>
