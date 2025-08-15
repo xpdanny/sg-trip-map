@@ -1,69 +1,154 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Singapore Trip Interactive Map</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: Arial, sans-serif;
-        }
-        #map {
-            height: 100%;
-            width: 100%;
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新加坡3天行程地图｜含OCBC办公与LDL-C饮食提示</title>
+<link rel="manifest" href="./manifest.json">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.awesome-markers/2.0.5/leaflet.awesome-markers.css">
+<style>
+  html, body, #map { height: 100%; margin: 0; }
+  .legend {
+    background: rgba(255,255,255,.92);
+    padding: 8px 10px;
+    border-radius: 6px;
+    line-height: 1.4;
+    box-shadow: 0 1px 4px rgba(0,0,0,.2);
+    font-size: 13px;
+  }
+  .topbar {
+    position: absolute; left: 10px; top: 10px; z-index: 1000;
+    background: rgba(255,255,255,.95);
+    padding: 8px 10px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.15);
+    font-size: 14px;
+  }
+  .topbar b { display:block; margin-bottom:4px;}
+  .btn {
+    display:inline-block; padding:6px 10px; border-radius:6px; border:1px solid #ddd; cursor:pointer;
+    user-select:none; margin-right:6px;
+  }
+</style>
 </head>
 <body>
-    <div id="map"></div>
+<div id="map"></div>
 
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script>
-        // 初始化地图，新加坡中心
-        var map = L.map('map').setView([1.3521, 103.8198], 12);
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.awesome-markers/2.0.5/leaflet.awesome-markers.js"></script>
+<script>
+// ---- 基础地图 ----
+var map = L.map('map', { zoomControl: true }).setView([1.303, 103.9], 12);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19, attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
 
-        // 添加 OpenStreetMap 瓦片层
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+// ---- 自定义图标 ----
+function amarker(icon, color='blue') {
+  return L.AwesomeMarkers.icon({ icon: icon, prefix: 'fa', markerColor: color, iconColor: 'white' });
+}
 
-        // 示例标记点
-        var locations = [
-            {name: "OCBC Bank", coords: [1.2841, 103.8510]},
-            {name: "East Coast Hotel", coords: [1.3039, 103.9150]},
-            {name: "Marina Bay Sands", coords: [1.2834, 103.8607]}
-        ];
+// ---- 地点数据 ----
+var hotel = { name: "东海岸酒店（示意）", coords: [1.305, 103.912],
+  html: "<b>东海岸酒店</b><br>建议早餐：燕麦粥/全麦吐司 + 水果 + 无糖豆浆<br>每日出发点与返回点" };
 
-        locations.forEach(function(loc) {
-            L.marker(loc.coords).addTo(map)
-                .bindPopup("<b>" + loc.name + "</b>");
-        });
+var bank = { name: "OCBC Bank 总行", coords: [1.2842, 103.8503],
+  html: "<b>OCBC Bank 总行</b><br>每日办公：13:30–15:30（预留路程）<br>建议：出门前准备无糖茶/水" };
 
-        // 点击地图添加标记
-        map.on('click', function(e) {
-            var lat = e.latlng.lat.toFixed(5);
-            var lng = e.latlng.lng.toFixed(5);
-            L.marker(e.latlng).addTo(map)
-                .bindPopup("新标记: " + lat + ", " + lng)
-                .openPopup();
-        });
-    </script>
+// Day 1 —— 滨海湾文化线
+var day1 = [
+  {name:"滨海湾花园", coords:[1.2816,103.8636], tip:"上午 9:00–12:00<br>步行与观景温度适中<br>午餐建议：烤三文鱼 + 糙米 + 凉拌蔬菜"},
+  {name:"艺术科学博物馆", coords:[1.2864,103.859], tip:"可短时参观（冷气足）"},
+  {name:"滨海湾金沙空中花园", coords:[1.2834,103.8607], tip:"视野开阔，拍照佳"},
+  {name:"鱼尾狮公园", coords:[1.2868,103.8545], tip:"经典打卡点"},
+  {name:"克拉码头", coords:[1.2906,103.8465], tip:"傍晚 16:00–18:00 慢走观河景"},
+  {name:"佛牙寺（牛车水）", coords:[1.2828,103.844], tip:"可顺路参观，清淡饮水少糖"}
+];
 
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js')
-                .then(function(reg) {
-                    console.log("Service Worker registered", reg);
-                })
-                .catch(function(err) {
-                    console.error("Service Worker registration failed:", err);
-                });
-        }
-    </script>
+// Day 2 —— 购物与美术馆
+var day2 = [
+  {name:"ION Orchard（乌节路）", coords:[1.3039,103.832], tip:"上午 9:00–12:00 逛街"},
+  {name:"小印度 Tekka Centre", coords:[1.3074,103.8501], tip:"留意低油烹调，少椰浆"},
+  {name:"新加坡国家美术馆", coords:[1.2903,103.8515], tip:"16:00–18:00 参观，室内步行"}
+];
+
+// Day 3 —— 圣淘沙休闲
+var day3 = [
+  {name:"Mount Faber 山顶/缆车站", coords:[1.2733,103.8198], tip:"上午 9:00–12:00 山顶轻徒步"},
+  {name:"S.E.A. 海洋馆", coords:[1.2645,103.8206], tip:"午后避暑参观"},
+  {name:"Siloso Beach（示意）", coords:[1.264,103.812], tip:"注意补水、防晒，晚餐建议：烤鸡胸 + 藜麦沙拉"}
+];
+
+// ---- 图层与颜色 ----
+var gHotel = L.layerGroup().addTo(map);
+var gBank  = L.layerGroup().addTo(map);
+var g1 = L.layerGroup().addTo(map);
+var g2 = L.layerGroup().addTo(map);
+var g3 = L.layerGroup().addTo(map);
+
+// 酒店与银行
+L.marker(hotel.coords, {icon: amarker('home','blue')}).addTo(gHotel).bindPopup(hotel.html);
+L.marker(bank.coords,  {icon: amarker('briefcase','red')}).addTo(gBank).bindPopup(bank.html);
+
+// 工具：添加一组点与折线
+function addDay(group, arr, colorName){
+  var latlngs = [];
+  arr.forEach(function(p, idx){
+    latlngs.push(p.coords);
+    L.marker(p.coords, {icon: amarker('star', colorName)})
+      .addTo(group)
+      .bindPopup("<b>"+p.name+"</b><br>"+p.tip);
+  });
+  // 从酒店出发，串联到银行（下午固定），再到傍晚景点（按列表）
+  var path = [hotel.coords].concat(latlngs.slice(0, Math.max(1, latlngs.length-1))).concat([bank.coords, latlngs[latlngs.length-1], hotel.coords]);
+  L.polyline(path, {weight: 3}).addTo(group);
+}
+
+// 三天分别添加（颜色：Day1 green、Day2 orange、Day3 purple）
+addDay(g1, day1, 'green');
+addDay(g2, day2, 'orange');
+addDay(g3, day3, 'purple');
+
+// 图层控制
+L.control.layers(null, {
+  "🏨 酒店": gHotel,
+  "🏦 OCBC 办公": gBank,
+  "🌞 Day 1 滨海湾文化": g1,
+  "🛍 Day 2 乌节路+美术馆": g2,
+  "🏖 Day 3 圣淘沙": g3
+}, {collapsed:false}).addTo(map);
+
+// 视野适配
+var allPts = [hotel.coords, bank.coords]
+  .concat(day1.map(d=>d.coords))
+  .concat(day2.map(d=>d.coords))
+  .concat(day3.map(d=>d.coords));
+map.fitBounds(L.latLngBounds(allPts), {padding:[30,30]});
+
+// 点击地图临时加点（可用于补充个人兴趣点）
+map.on('click', function(e){
+  var lat = e.latlng.lat.toFixed(5), lng = e.latlng.lng.toFixed(5);
+  L.marker(e.latlng, {icon: amarker('map-marker','cadetblue')})
+    .addTo(map)
+    .bindPopup("自定义标记<br>"+lat+", "+lng)
+    .openPopup();
+});
+
+// ---- LDL-C 提醒按钮 ----
+var top = L.control({position:'topleft'});
+top.onAdd = function(){
+  var div = L.DomUtil.create('div', 'topbar');
+  div.innerHTML = '<b>LDL-C 饮食提醒</b>\
+  ✅ 多：深海鱼、蔬果、全谷物、豆类、坚果(少量)<br>\
+  ⚠️ 少/避：油炸、椰浆、肥肉、内脏、含糖饮料<br>\
+  💧 多喝水，步行 8,000+ 步/日';
+  return div;
+};
+top.addTo(map);
+
+// 注册 service worker（可选）
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./service-worker.js").catch(console.warn);
+}
+</script>
 </body>
 </html>
